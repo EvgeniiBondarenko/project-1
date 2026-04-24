@@ -13,20 +13,15 @@ def get_mask_card_number(card_number: Union[str, int]) -> str:
     return f"{digits[:4]} {digits[4:6]}** **** {digits[-4:]}"
 
 
-def get_mask_account(account_number: str) -> str:
+def get_mask_account(account_number: Union[str, int]) -> str:
     """Маскирует номер счета в формате **XXXX"""
 
-    # Проверяем чтобы номер состоял только из цифр
-    if not account_number.isdigit():
-        raise ValueError("Номер счета должен содержать только цифры")
+    # Очищаем номер от нецифровых символов
+    digits = "".join(filter(str.isdigit, str(account_number)))
 
     # Проверяем длину
-    if len(account_number) != 20:
-        raise ValueError(f"Номер счета должен содержать 20 цифр. Получено: {len(account_number)} цифр")
-
-    # Получаем последнии 4 цифры номера счета
-    last_four_digits = account_number[-4:]
+    if len(digits) != 20:
+        raise ValueError(f"Номер счета должен содержать 20  цифр")
 
     # Возвращаем маскированный номер в формате **XXXX
-    return f"**{last_four_digits}"
-
+    return f"**{digits[-4:]}"
