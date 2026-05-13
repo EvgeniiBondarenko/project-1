@@ -21,7 +21,7 @@ def get_mask_account(account_number: Union[str, int]) -> str:
 
     # Проверяем длину
     if len(digits) != 20:
-        raise ValueError(f"Номер счета должен содержать 20  цифр")
+        raise ValueError(f"Номер счета должен содержать 20 цифр.")
 
     # Возвращаем маскированный номер в формате **XXXX
     return f"**{digits[-4:]}"
