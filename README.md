@@ -69,34 +69,6 @@ for card in card_number_generator(1, 3):
 # 0000 0000 0000 0003
 ```
 
-### Модуль сортировки (`sorting`)
-
-Содержит функцию `sort_by_date`, которая сортирует список транзакций по дате.
-
-```python
-from sorting import sort_by_date
-
-transactions = [
-    {"date": "2024-01-15", "amount": 100},
-    {"date": "2023-12-01", "amount": 200},
-    {"date": "2024-06-20", "amount": 150},
-]
-
-sorted_asc = sort_by_date(transactions, descending=False)
-# [
-#   {"date": "2023-12-01", "amount": 200},
-#   {"date": "2024-01-15", "amount": 100},
-#   {"date": "2024-06-20", "amount": 150},
-# ]
-
-sorted_desc = sort_by_date(transactions)
-# [
-#   {"date": "2024-06-20", "amount": 150},
-#   {"date": "2024-01-15", "amount": 100},
-#   {"date": "2023-12-01", "amount": 200},
-# ]
-```
-
 ## Тестирование
 
 Проект покрыт тестами с использованием [pytest](https://docs.pytest.org/).
