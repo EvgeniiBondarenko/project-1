@@ -64,6 +64,9 @@ def test_filter_by_currency_malformed_data(sample_transactions: list[dict[str, A
         {"description": "Нет operationAmount"}, # Нет 'operationAmount'
         {"operationAmount": {"currency": {"other_key": "value"}}, "description": "Другой ключ"} # Не тот ключ
     ]
+
+
+
     filtered_generator = filter_by_currency(malformed_transactions, "USD")
     filtered_list = list(filtered_generator)
 
@@ -104,57 +107,27 @@ def test_transaction_descriptions_empty_list():
     assert len(descriptions_list) == 0
     assert descriptions_list == []
 
-def test_card_number_generator_range():
-    """Тест генератора номеров карт в стандартном диапазоне."""
-    generator = card_number_generator(1, 3)
+# Параметры для теста: (start, stop, expected_card_numbers)
+@pytest.mark.parametrize(
+    "start, stop, expected_card_numbers",
+    [
+        (1, 3, ["0000 0000 0000 0001", "0000 0000 0000 0002", "0000 0000 0000 0003"]), # Стандартный диапазон
+        (1234567890123456, 1234567890123456, ["1234 5678 9012 3456"]), # Один номер
+        (10, 5, []), # Пустой диапазон
+        (1, 2, ["0000 0000 0000 0001", "0000 0000 0000 0002"]), # Нужна паддинг
+        (1234567890123, 1234567890124, ["0001 2345 6789 0123", "0001 2345 6789 0124"]), # Крупные числа с паддингом
+        (9999999999999999, 9999999999999999, ["9999 9999 9999 9999"]) # Максимальное 16-значное число
+    ],
+    ids=["range_1_to_3", "single_number", "empty_range", "padding_small", "padding_large", "max_value"]
+)
+def test_card_number_generator_with_parametrize(
+    start: int,
+    stop: int,
+    expected_card_numbers: list[str]
+):
+    """Тест генератора номеров карт с использованием parametrize."""
+    generator = card_number_generator(start, stop)
     card_numbers = list(generator)
 
-    assert len(card_numbers) == 3
-    assert card_numbers == [
-        "0000 0000 0000 0001",
-        "0000 0000 0000 0002",
-        "0000 0000 0000 0003"
-    ]
-
-def test_card_number_generator_single_number():
-    """Тест генератора при одном числе в диапазоне."""
-    generator = card_number_generator(1234567890123456, 1234567890123456)
-    card_numbers = list(generator)
-
-    assert len(card_numbers) == 1
-    assert card_numbers[0] == "1234 5678 9012 3456"
-
-def test_card_number_generator_empty_range():
-    """Тест генератора при пустом диапазоне (start > stop)."""
-    generator = card_number_generator(10, 5)
-    card_numbers = list(generator)
-
-    assert len(card_numbers) == 0
-    assert card_numbers == []
-
-def test_card_number_generator_padding():
-    """Тест генератора на числах, требующих дополнения нулями."""
-    generator = card_number_generator(1, 2)
-    card_numbers = list(generator)
-
-    assert len(card_numbers) == 2
-    assert card_numbers[0] == "0000 0000 0000 0001"
-    assert card_numbers[1] == "0000 0000 0000 0002"
-
-    # Тест для чисел, приближенных к 16-значному формату
-    generator_large = card_number_generator(1234567890123, 1234567890124) # 13 цифр
-    card_numbers_large = list(generator_large)
-    assert len(card_numbers_large) == 2
-    assert card_numbers_large[0] == "0001 2345 6789 0123"
-    assert card_numbers_large[1] == "0001 2345 6789 0124"
-
-def test_card_number_generator_max_value():
-    """Тест генератора с максимальным 16-значным числом."""
-    max_int_16_digits = 9999999999999999
-    generator = card_number_generator(max_int_16_digits, max_int_16_digits)
-    card_numbers = list(generator)
-
-    assert len(card_numbers) == 1
-    assert card_numbers[0] == "9999 9999 9999 9999"
-
-
+    assert card_numbers == expected_card_numbers
+    assert len(card_numbers) == len(expected_card_numbers)
