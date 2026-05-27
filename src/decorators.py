@@ -2,6 +2,12 @@ import functools
 import logging
 from typing import Any, Callable, Optional
 
+"""Декоратор для логирования вызовов функции.
+
+    Логирует начало и завершение выполнения функции, а также любые ошибки,
+    которые могут возникнуть во время ее исполнения.
+"""
+
 
 def log(filename: Optional[str] = None) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     if filename:
