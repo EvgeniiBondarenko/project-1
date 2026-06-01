@@ -1,106 +1,25 @@
 # Проект разработки банковского приложения
+В  проект был добавлен модуль `decorators.py`, который содержит декоратор для логирования выполнения функций. Этот модуль позволяет автоматически записывать информацию о входных аргументах, результатах и ошибках при выполнении функций. Декоратор может быть использован в любом месте вашего проекта для упрощения процесса отладки и мониторинга.
 
-## Описание
+## Модуль: decorators.py
 
-Создание виджета банковских операций клиента. 
+### Декоратор `log`
 
-## Установка
+Декоратор `log` позволяет логировать выполнение функций, принимая необязательный аргумент `filename`, который указывает имя файла, куда будут записываться логи. Если имя файла не задано, логи будут выведены в стандартный поток (обычно консоль).
 
-1. Клонируйте репозиторий:
-   ```
-   git clone https://github.com/EvgeniiBondarenko/project-1/pull/1
-   ```
+#### Параметры
 
-## Использование:
+- `filename` (str, optional): Имя файла для записи логов. Если не указано, использование стандартного вывода.
 
-1. Откройте приложение в вашем веб-браузере.
-2. Создайте новый проект и начните добавлять задачи.
-3. Назначайте сроки выполнения и приоритеты для задач, чтобы эффективно управлять проектами.
-
-## Модули
-
-### Модуль генераторов (`generators`)
-
-Предоставляет функции для работы со списками транзакций и генерации номеров карт.
-
-#### `filter_by_currency(transactions, currency)`
-
-Фильтрует транзакции по заданной валюте.
+#### Примеры использования
 
 ```python
-from generators import filter_by_currency
+from decorators import log
 
-transactions = [
-    {"operationAmount": {"currency": {"code": "USD"}}, "description": "Перевод"},
-    {"operationAmount": {"currency": {"code": "RUB"}}, "description": "Оплата"},
-]
+@log(filename="function_logs.log")
+def add(a, b):
+    return a + b
 
-usd_transactions = list(filter_by_currency(transactions, "USD"))
-# [{"operationAmount": {"currency": {"code": "USD"}}, "description": "Перевод"}]
-```
-
-#### `transaction_descriptions(transactions)`
-
-Возвращает описания транзакций одну за другой (генератор).
-
-```python
-from generators import transaction_descriptions
-
-descriptions = transaction_descriptions(transactions)
-print(next(descriptions))  # "Перевод"
-print(next(descriptions))  # "Оплата"
-```
-
-#### `card_number_generator(start, stop)`
-
-Генерирует номера карт в формате `XXXX XXXX XXXX XXXX` в заданном диапазоне.
-
-```python
-from generators import card_number_generator
-
-for card in card_number_generator(1, 3):
-    print(card)
-# 0000 0000 0000 0001
-# 0000 0000 0000 0002
-# 0000 0000 0000 0003
-```
-
-## Тестирование
-
-Проект покрыт тестами с использованием [pytest](https://docs.pytest.org/).
-
-### Установка зависимостей для тестов
-
-```bash
-pip install -r requirements.txt
-pip install pytest
-```
-
-### Запуск тестов
-
-```bash
-pytest
-```
-
-Для запуска тестов с выводом покрытия кода:
-
-```bash
-pytest --cov=
-```
-
-### Пример вывода
-
-```
-Для запуска тестов установите необходимые пакеты:
-pip install -r requirements.txt  pip install pytest
-
-### Запуск тестов
-
-Чтобы выполнить все тесты, используйте команду:
-pytest
-
-Для запуска тестов с выводом покрытия кода:
-pytest --cov=
-
-Для запуска тестов с выводом покрытия кода:
-### Пример вывода
+@log()
+def divide(a, b):
+    return a / b
